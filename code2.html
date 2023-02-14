@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Temperature Converter</title>
+  </head>
+  <body>
+    <h1>Temperature Converter</h1>
+    <form>
+      <label for="temp">Temperature:</label>
+      <input type="number" id="temp" name="temp"><br>
+
+      <label for="from_unit">From:</label>
+      <select id="from_unit" name="from_unit">
+        <option value="C">Celsius</option>
+        <option value="F">Fahrenheit</option>
+        <option value="K">Kelvin</option>
+      </select><br>
+
+      <label for="to_unit">To:</label>
+      <select id="to_unit" name="to_unit">
+        <option value="C">Celsius</option>
+        <option value="F">Fahrenheit</option>
+        <option value="K">Kelvin</option>
+      </select><br>
+
+      <button type="button" onclick="convert()">Convert</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+      function convert() {
+        // Get the input values
+        var temp = document.getElementById("temp").value;
+        var from_unit = document.getElementById("from_unit").value;
+        var to_unit = document.getElementById("to_unit").value;
+
+        // Send a POST request to the Flask route
+        fetch("/", {
+          method: "POST",
+          body: JSON.stringify({temp: temp, from_unit: from_unit, to_unit: to_unit}),
+          headers: {"Content-Type": "application/json"}
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Update the result field with the converted temperature
+          document.getElementById("result").innerHTML = "Result: " + data.result;
+        });
+      }
+    </script>
+  </body>
+</html>
